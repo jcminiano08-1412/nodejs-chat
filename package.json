@@ -1,1 +1,25 @@
-npm init -y
+{
+  "name": "nodejs-chat",
+  "version": "1.0.0",
+  "description": "",
+  "main": "server.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "start": "node server.js"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/jcminiano08-1412/nodejs-chat.git"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/jcminiano08-1412/nodejs-chat/issues"
+  },
+  "homepage": "https://github.com/jcminiano08-1412/nodejs-chat#readme",
+  "dependencies": {
+    "express": "^5.1.0",
+    "socket.io": "^4.8.1"
+  }
+}
