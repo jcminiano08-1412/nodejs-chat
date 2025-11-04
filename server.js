@@ -5,19 +5,25 @@ const { Server } = require('socket.io');
 
 const app = express();
 const server = http.createServer(app);
+
+// Socket.IO with proper CORS
 const io = new Server(server, {
     cors: {
-        origin: ['http://localhost:3000', 'http://localhost:5500'], // your local frontend URLs
+        origin: [
+            'http://localhost:3000', // local frontend
+            'http://localhost:5500', // Live Server port if used
+            // 'https://your-frontend.com' // add your deployed frontend later
+        ],
         methods: ['GET', 'POST'],
         credentials: true
     }
 });
 
+// Use Railway port
+const PORT = process.env.PORT || 3000;
 
-const PORT = 3000;
-
-// Store messages in memory (optional). In production, save to DB.
-let messages = {}; // { ticketId: [ { userId, message, timestamp } ] }
+// In-memory messages (temporary)
+let messages = {}; // { ticketId: [ { userId, username, message, timestamp } ] }
 
 io.on('connection', (socket) => {
     console.log('A user connected:', socket.id);
@@ -29,15 +35,13 @@ io.on('connection', (socket) => {
 
         // Send existing messages for this ticket
         if (messages[ticketId]) {
-            messages[ticketId].forEach(msg => {
-                socket.emit('newMessage', msg);
-            });
+            messages[ticketId].forEach(msg => socket.emit('newMessage', msg));
         }
     });
 
     // Handle new message
     socket.on('sendMessage', (data) => {
-        const { ticketId, userId, message } = data;
+        const { ticketId, userId, username, message } = data; // destructure username from client
         const timestamp = new Date().toISOString();
 
         const msgData = { ticketId, userId, username, message, timestamp };
@@ -55,6 +59,12 @@ io.on('connection', (socket) => {
     });
 });
 
+// Optional test route
+app.get('/', (req, res) => {
+    res.send('Socket.IO server is live!');
+});
+
+// Start server
 server.listen(PORT, () => {
-    console.log(`Socket.IO server running at http://localhost:${PORT}`);
+    console.log(`Socket.IO server running on port ${PORT}`);
 });
