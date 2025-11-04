@@ -29,14 +29,14 @@ io.on('connection', (socket) => {
     });
 
     socket.on('sendMessage', (data) => {
-        const { ticketId, userId, username, message } = data;
+        const { ticketId, userId, username, message, attachment } = data; // <-- add attachment
         const timestamp = new Date().toISOString();
-
-        const msgData = { ticketId, userId, username, message, timestamp };
-
-        // Broadcast to all users in this ticket room
+    
+        const msgData = { ticketId, userId, username, message, attachment, timestamp }; // <-- include it
+    
         io.to('ticket_' + ticketId).emit('newMessage', msgData);
     });
+
 
     socket.on('disconnect', () => {
         console.log('User disconnected:', socket.id);
