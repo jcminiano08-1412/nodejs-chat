@@ -38,7 +38,7 @@ io.on('connection', (socket) => {
         const { ticketId, userId, message } = data;
         const timestamp = new Date().toISOString();
 
-        const msgData = { ticketId, userId, message, timestamp };
+        const msgData = { ticketId, userId, username, message, timestamp };
 
         // Save to memory
         if (!messages[ticketId]) messages[ticketId] = [];
